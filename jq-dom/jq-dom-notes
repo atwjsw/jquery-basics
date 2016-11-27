@@ -1,0 +1,91 @@
+#原生JS创建节点和节点属性
+- 创建流程：
+创建节点(常见的：元素、属性和文本)
+添加节点的一些属性
+加入到文档中
+- 创建方法：
+创建元素：document.createElement
+设置属性：setAttribute
+添加文本：innerHTML
+加入文档：appendChild
+
+- 存在问题：
+每一个元素节点都必须单独创建
+节点是属性需要单独设置，而且设置的接口不是很统一
+添加到指定的元素位置不灵活
+最后还有一个最重要的：浏览器兼容问题处理
+
+#jQuery节点创建
+可以有几种方式，后面会慢慢接触。常见的就是直接把这个节点的结构给通过HTML标记字符串描述出来，通过$()函数处理，$("html结构")
+
+$("<div></div>")
+- 创建元素节点：常见的就是直接把这个节点的结构给通过HTML标记字符串描述出来，通过$()函数处理，$("html结构")
+$("<div></div>")
+- 创建为本节点：与创建元素节点类似，可以直接把文本内容一并描述
+$("<div>我是文本节点</div>")
+- 创建为属性节点：与创建元素节点同样的方式
+$("<div id='test' class='aaron'>我是文本节点</div>")
+
+#jQuery节点添加
+- 方法都是都可以接收HTML字符串，DOM 元素，元素数组，或者jQuery对象，用来插入到集合中每个匹配元素的前面或者后面
+- 方法都支持多个参数传递after(div1,div2,....) 
+- before，after： 作为兄弟节点插入
+- insertBefore，insertAfter：同上。目标和对象调换。
+- before、after与insertBefore。insertAfter的除了目标与位置的不同外，后面的不支持多参数处理
+- append，appendTo：作为子节点插入，放在首位
+- prepend()，prependTo()：作为子节点插入，放在末位
+
+#jQuery节点删除
+- empty(): 这个方法不仅移除子元素（和其他后代元素），同样移除元素里的文本
+- remove(): 将元素自身移除，同时也会移除元素内部的一切，包括绑定的事件及与该元素相关的jQuery数据。
+- detach(): 删除页面上的节点，但是又不希望节点上的数据与事件丢失，并且能在下一个时间段让这个删除的节点显示到页面
+
+#jQuery节点拷贝
+- .clone()方法深度 复制所有匹配的元素集合，包括所有匹配元素、匹配元素的下级元素、文字节点。
+- clone方法比较简单就是克隆节点，但是需要注意，如果节点有事件或者数据之类的其他处理，我们需要通过clone(ture)传递一个布尔值ture用来指定
+- .replaceWith( newContent )：用提供的内容替换集合中所有匹配的元素并且返回被删除元素的集合
+- .replaceAll( target ) ：用集合的匹配元素替换每个目标元素
+- .replaceAll()和.replaceWith()功能类似，主要是目标和源的位置区别
+- .replaceWith()与.replaceAll() 方法会删除与节点相关联的所有数据和事件处理程序
+- .replaceWith()方法，和大部分其他jQuery方法一样，返回jQuery对象，所以可以和其他方法链接使用
+- .replaceWith()方法返回的jQuery对象引用的是替换前的节点，而不是通过replaceWith/replaceAll方法替换后的节点
+- .wrap( wrappingElement )：在集合中匹配的每个元素周围包裹一个HTML结构,也就是给它增加一个父元素，
+- .unwrap(): 作用与wrap方法是相反的。将匹配元素集合的父级元素删除，保留自身（和兄弟元素，如果存在）在原来的位置。
+- .wrapAll( wrappingElement )：给集合中匹配的元素增加一个外面包裹HTML结构
+- wrapInner( wrappingElement )：给集合中匹配的元素的内部，增加包裹的HTML结构
+
+#jQuery遍历
+- children()：直接子元素搜索，并且构造一个新的匹配元素的jQuery对象；$("div").children(".selected")
+- *find(): 开发使用频率很高的方法。children是父子关系查找，find是后代关系（包含父子关系）
+- parent(): 在DOM树中搜索到这些元素的父级元素，从有序的向上匹配元素，并根据匹配的元素创建一个新的 jQuery 对象
+- parents(): 其实也类似find与children的区别，parent只会查找一级，parents则会往上一直查到查找到祖先节点
+- children()：向下找儿子;parent()：向上找爸爸; parents()：向上找祖宗; find()：向下查找后代
+- *closest(): 开发使用频率很高的方法。.closest开始于当前元素 .parents开始于父元素, closest向上查找，直到找到一个匹配的就停止查找
+- next(): 快速查找指定元素集合中每一个元素紧邻的后面同辈元素的元素集合
+- prev(): 快速查找指定元素集合中每一个元素紧邻的前面同辈元素的元素集合
+- siblings(): 快速查找指定元素集合中每一个元素的同辈元素
+- add(): 用来创建一个新的jQuery对象 ，元素添加到匹配的元素集合中
+add()与append()不一样，add()是指在JQuery对象集合中增加一个对象，而append()是在DOM集合中增加一个节点。add()不会直接影响界面，append()会对界面产生影响。
+- each() 方法就是一个for循环的迭代器，它会迭代jQuery对象合集中的每一个DOM元素。每次回调函数执行时，会传递当前循环次数作为参数(从0开始计数)
+案例:
+<ul>
+    <li>慕课网</li>
+    <li>Aaron</li>
+</ul>
+
+开始迭代li，循环2次
+$("li").each(function(index, element) {
+     index 索引 0,1
+     element是对应的li节点 li,li
+     this 指向的是li
+})
+
+#总结
+.children()    找儿子
+.find()        找后代
+.parent()      找爸爸
+.parents()     找长辈(直接遍历到根元素,可能返回零个或一个或多个元素)
+.closest()     找长辈(从当前节点向上遍历,找到停止,返回零个或一个元素)
+.next()	       找小弟
+.prev()	       找大哥
+.siblings()    找兄弟

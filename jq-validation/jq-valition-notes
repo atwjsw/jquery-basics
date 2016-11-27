@@ -1,0 +1,104 @@
+#客户端验证优点：
+- 减少服务器压力
+- 缩短客户等待时间，提升客户体验
+
+#jQuery有许多表单验证插件
+- https://plugins.jquery.com/tag/validate
+- jQuery Validation插件是最常用的。http://jqueryvalidation.org/
+
+#引入
+- 最新版本为1.13.1， 先要引用jQuery
+- <script src="jquery.js"></script>
+- <script src="jquery.validate.js"></script>
+
+#method: 验证方法，指的是验证的逻辑
+#rule: 验证规则，指的是元素和验证方法的关联
+
+#基本验证方法
+- required
+- remote 远程校验
+- minlength
+- maxlength
+- min 最小值
+- max 最大值
+- range 值范围
+- email email格式
+- url URL格式
+- date 日期
+- dateISO ISO日期
+- number 数字
+- digits 整数
+- equalTo 与另一元素值相等
+
+#validate是插件的核心方法，定义了基本的校验规则和配置项
+- 配置项debug，为true时表单不会提交。
+
+#valid()
+- 检查表单或者某些元素是否有效
+
+#rules(): 获取表单元素的校验规则
+#rules("add", rules) 向表单添加校验规则
+#rules("remove", rules) 从表单删除校验规则
+样例：
+$("#form").valid()?"correct":"error";        //valid()方法检查表单或元素是否有效，返回true,false
+$("username").rules();                       //获取表单元素（表单里的某个元素，而不是表单）的校验规则
+$("username").rules("add",{min:2,max:10};    //添加规则
+$("username").rules("remove","min max");     //删除规则
+
+#Validator对象
+- validator.form()                        //整个表单是否有效  true/false
+- validator.element("#username")           //验证元素有无校
+- validator.resetForm()                   //表单恢复到验证前状态
+- validator.showErrors({})                //针对某个元素显示特定的错误信息
+- validator.numberOfInvalids()            //返回无效元素数量
+
+#Validator静态方法
+- jQuery.validator.addMethod(name, method[, message]): 增加自定义的验证方法
+- jQuery.validator.format(template, argument, argumentN...): 格式化字符串，用参数代替模板中的{n}
+var template = $.validator.format("{0}-{1}-{2}");
+template('你','我','他'); //"你-我-他"
+- jQuery.validator.setDefaults(options): 修改插件默认设置
+- jQuery.validator.addClassRules(name, rules): 为某些包含名为name的class增加组合验证类型
+
+#validate方法的配置项
+- debug： 同上
+- submitHandler： 通过验证后运行的函数，可以加上表单提交的方法
+- invalidHandler： 无效表单提交后运行的函数
+- ignore： 对某些元素不进行验证
+- rules： 定义校验规则
+- messages：定义提示信息 
+- groups：对一组元素验证，用一个错误提示，用errorPlacement控制把出错信息放在哪里
+- onsubmit 是否在提交是验证
+- onfocusout 是否在获取焦点时验证
+- onkeyup 是否在敲击键盘时验证
+- onclick 是否在鼠标点击时验证，一般用于checkbox或者radio
+- focusInvalid 提交表单后，未同感验证的表单是否会获得焦点
+- focusCleanup 当为通过验证的元素获得焦点时，是否移除错误提示
+- errorClass 指定错误提示的CSS类名
+- validClass 指定错误提示的CSS类名
+- errorElement 使用什么标签标记错误
+- wrapper 使用什么标签把上边的errorElement包起来
+- errorLabelContainer 把错误信息统一放在一个容器里面
+- errorContainer 显示或者隐藏验证信息，可以自动实现有错误出现时把容器属性变为显示，无错误时隐藏
+- showErrors 可以显示总共有多少个未通过验证的元素
+- errorPlacement 自定义错误信息放到哪里
+- success 要验证的元素通过验证后的动作
+- hightlight 可以给未通过验证的元素加效果
+- unhighlight 去除未通过验证的元素的效果，一般和和highlight同时使用
+
+#选择器扩展
+- :blank 选择所有值为空的元素
+- :filled	选择所有值不为空的元素
+- :unchecked 选择所有没有被选中的元素
+
+#自定义验证方法
+- jQuery.validator.addMethod(name, method,[,message]); 
+- name:方法名称； 
+- method: function(value, element, params), 验证方法逻辑
+- message：提示消息
+
+#additional-method.js 包含了很多扩展验证方法
+
+# 安全性
+- 服务端不要相信客户端的任何数据
+- 必须进行二次验证

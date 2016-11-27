@@ -1,0 +1,70 @@
+#hide(): 让页面上的元素不可见
+- $elem.hide()
+- .hide( options ): 当提供hide方法一个参数时，.hide()就会成为一个动画方法。将会匹配元素的宽度，高度，以及不透明度，同时进行动画操作
+- .hide("fast / slow"): 'fast' 和 'slow' 分别代表200和600毫秒的延时，就是元素会执行200/600毫秒的动画后再隐藏
+
+#show(): 
+- hide是让元素显示到隐藏，show则是相反，让元素从隐藏到显示
+- $('elem').hide(3000).show(3000): 让元素执行3秒的隐藏动画，然后执行3秒的显示动画。
+- show与hide方法是非常常用的，但是一般很少会基于这2个属性执行动画，大多情况下还是直接操作元素的显示与隐藏为主
+- show与hide方法是修改的display属性，通过是visibility属性布局需要通过css方法单独设置
+
+#toggle方法: 显示与隐藏切换
+- 基本的操作：toggle(); 处理元素显示或者隐藏，因为不带参数，所以没有动画。如果元素是最初显示，它会被隐藏，反之则反
+- display属性将被储存并且需要的时候可以恢复。如果一个元素的display值为inline，然后是隐藏和显示，这个元素将再次显示inline
+- 提供参数：.toggle( [duration ] [, complete ] )：提供了时间、还有动画结束的回调。在参数对应的时间内，元素会发生显示/隐藏的改变，在改变的过程中会把元素的高、宽、不透明度进行一系列动画效果。
+- 直接定位：.toggle(display)，直接提供一个参数，指定要改变的元素的最终效果，其实就是确定是使用show还是hide方法
+
+#slideDown
+- slideDown和show的区别就是 slideDown只匹配高度
+
+#slideUp
+- slideUp和hide的区别就是 slideDown只匹配高度
+
+#slideToggle：上卷下拉切换
+- slideToggle和toggle的区别就是 slideToggle只匹配高度
+
+#fadeout：淡出动画
+- 用于隐藏所有匹配的元素，并带有淡出的过渡动画效果，所谓"淡出"隐藏的，元素是隐藏状态不对作任何改变，元素是可见的，则将其隐藏。
+- .fadeOut( [duration ], [ complete ] )
+- 通过不透明度的变化来实现所有匹配元素的淡出效果，并在动画完成后可选地触发一个回调函数。
+- 原文：这个动画只调整元素的透明度，也就是说所有匹配的元素的高度和宽度不会发生变化。实际最后透明度变为0以后设置为了display:none
+
+#fadein：淡出动画
+- fadeOut是淡出效果，相反的还有淡入效果fadeIn,方法使用上两者都是一致的，只是结果相反
+
+#fadeToggle： 淡入淡出切换
+- fadeToggle切换fadeOut与fadeIn效果，所谓"切换"，即如果元素当前是可见的，则将其隐藏(淡出)；如果元素当前是隐藏的，则使其显示(淡入)。
+
+#fadeTo：淡入效果
+- 淡入淡出fadeIn与fadeOut都是修改元素样式的opacity属性，但是他们都有个共同的特点，变化的区间要么是0，要么是1
+- 如果要让元素保持动画效果，执行opacity = 0.5的效果时，要如何处理？
+- 如果不考虑CSS3，我们用JS实现的话，基本就是通过定时器，在设定的时间内一点点的修改opacity的值，最终为0.5，原理虽说简单，但是总不如一键设置这么舒服，jQuery提供了fadeTo方法，可以让改变透明度一步到位
+- .fadeTo( duration, opacity ,callback)
+
+#toggle vs. slideToggle vs. fadeToggle
+- toggle改变display和所有能改变的属性值，slidetoggle先改变height，当height为0则display为none，fadetoggle先改变opacity，当opacity为0，再改变diasplay为none，
+
+#animate()
+- animate方法更加灵活了，可以精确的控制样式属性从而执行动画
+- 语法：
+.animate( properties ,[ duration ], [ easing ], [ complete ] )
+.animate( properties, options )
+- 允许在任意的CSS属性上创建动画。唯一必要的属性就是一组CSS属性键值对。这组属性和用于设置.css()方法的属性键值对类似，除了属性范围做了更多限制。第二个参数开始可以单独传递多个实参也可以合并成一个对象传递
+
+#停止动画stop
+
+#jQuery.inArray()
+- 函数判断元素是否存在数组中。注意了：在ECMAScript5已经有数据的indexOf方法支持了，但是jQuery保持了版本向下兼容，所以封装了一个inArray方法
+- 用于在数组中搜索指定的值，并返回其索引值。如果数组中不存在该值，则返回 -1。
+- 语法：jQuery.inArray( value, array ,[ fromIndex ] ): 传递一个检测的目标值，然后传递原始的数组，可以通过fromIndex规定查找的起始值，默认数组是0开始
+
+#jQuery.trim()： 去除字符串两端的空白字符
+- 通过input可以获取用户的输入值，例如常见的登录信息的提交处理。用户的输入不一定是标准的，输入一段密码：'  1123456  "，注意了： 密码的前后会留空，这可能是用户的无心的行为，但是密码确实又没错，针对这样的行为，开发者应该要判断输入值的前后是否有空白符、换行符、制表符这样明显的无意义的输入值。
+
+#DOM元素的获取get方法
+- get方法是获取的dom对象，也就是通过document.getElementById获取的对象
+- get方法是从0开始索引
+
+#DOM元素的获取index方法
+- index()方法，从匹配的元素中搜索给定元素的索引值，从0开始计数。

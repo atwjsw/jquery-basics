@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>jQuery Validation 插件</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <form id="demoForm">
+        <fieldset>
+            <legend>用户登录</legend>
+            <p id="info"></p>
+            <p>
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" />
+            </p>
+            <p>
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" />
+            </p>
+            <p>
+                <label for="confirm-password">确认密码</label>
+                <input type="password" id="confirm-password" name="confirm-password" />
+            </p>
+            <p>
+                <label for="email">电子邮件</label>
+                <input type="text" id="email" name="email" />
+            </p>
+            <p>
+                <label for="url">个人网页</label>
+                <input type="text" id="url" name="url" />
+            </p>
+            <p>
+                <label for="birthdate">出生日期</label>
+                <input type="text" id="birthdate" name="birthdate" />
+            </p>
+            <p>
+                <label for="age">年龄</label>
+                <input type="text" id="age" name="age" />
+            </p>
+            <p>
+                <label for="salary">工资</label>
+                <input type="text" id="salary" name="salary" />
+            </p>
+            <p>
+                <input type="submit" value="登录" />
+            </p>
+        </fieldset>
+    </form>
+    <script src="vendor/jquery-1.10.0.js"></script>
+    <script src="vendor/jquery.validate-1.13.1.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#demoForm').validate({
+            //debug: true, //验证通过也不提交表单
+            rules: {
+                //对username的校验规则
+                username: {
+                    required: true, //校验方法1 
+                    minlength: 2, //校验方法2 
+                    maxlength: 10, //校验方法3
+                    //rangelength: [2,10],
+                    //min: 2,
+                    //max: 10,
+                    //remote: "remote.json"    //通过AJAX实时远程验证,GET请求
+                    /*remote: {                  //Post请求，同时传递数据
+                        url: "remote.json",
+                        type: "post",
+                        data: {
+                            loginTime: function() {
+                                return +new Date;
+                            }
+                        }
+                    }*/
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                url: {
+                    //required: true,
+                    url: true
+                },
+                birthdate: {
+                    required: true,
+                    //date: true //date验证范围宽泛
+                    dateISO: true
+                },
+                age: {
+                    required: true,
+                    digits: true
+                },
+                salary: {
+                    required: true,
+                    number: true
+                },
+                password: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 12
+                },
+                "confirm-password": {
+                    equalTo: "#password"
+                }
+            },
+            messages: {
+                username: {                    
+                    required: "用户名必须填写", //错误信息
+                    minlength: "用户名至少为2位",
+                    maxlength: "用户名不超过10位",
+                    rangelength: "用户名应该在2至10位之间",
+                    remote: "用户名已存在"
+                },
+                password: {
+                    required: "密码必须填写",
+                    minlength: "密码至少为6位",
+                    maxlength: "密码不超过12位"
+                },
+                email: {
+                    required: "电子邮件必须填写",
+                    email: "请输入正确的电子邮件地址"
+                },
+                url: {
+                    //required: "个人网页必须填写",
+                    url: "请输入正确的个人网页地址"
+                },
+                birthdate: {
+                    required: "出生日期必须填写",
+                    dateISO: "请输入正确的出生日期"
+                },
+                age: {
+                    required: "年龄必须填写",
+                    digits: "请输入正确的年龄"
+                },
+                salary: {
+                    required: "工资必须填写",
+                    number: "请输入正确的工资"
+                },
+                 "confirm-password": {
+                    equalTo: "两次输入的密码不一致"
+                }
+
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>

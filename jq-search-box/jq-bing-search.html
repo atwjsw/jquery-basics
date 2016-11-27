@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>JQuery Bing Search</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+    <style type="text/css">
+    body {
+        background-color: #333;
+    }
+    
+    .bg-div {
+        background-image: url(river.jpg);
+        width: 1366px;
+        height: 768px;
+        margin: 0 auto;
+        position: relative;
+    }
+    
+    .logo {
+        margin: -4px 18px 0 0;
+        background-image: url(logo.png);
+        width: 107px;
+        height: 53px;
+        float: left;
+    }
+    
+    form {
+        float: left;
+        background-color: #fff;
+        padding: 5px;
+    }
+    
+    .search-input-text {
+        border: 0;
+        float: left;
+        height: 29px;
+        line-height: 29px;
+        outline: none;
+        width: 350px;
+        font-size: 100%;
+    }
+    
+    .search-input-button {
+        border: 0;
+        background-image: url(search-button.png);
+        height: 29px;
+        width: 29px;
+        cursor: pointer;
+    }
+    
+    .search-box {
+        position: absolute;
+        top: 200px;
+        left: 300px;
+    }
+    
+    .suggest {
+        width: 388px;
+        background-color: #fff;
+        border: 1px solid #999;
+    }
+    
+    .suggest ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .suggest ul li {
+        padding: 3px;
+        font-size: 14px;
+        line-height: 25px;
+        cursor: pointer;
+    }
+    
+    .suggest ul li:hover {
+        text-decoration: underline;
+        background-color: #e5e5e5;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="bg-div">
+        <div class="search-box">
+            <div class="logo"></div>
+            <form id="search-form">
+                <input type="text" class="search-input-text" id="search-input-text" />
+                <input type="submit" value="" class="search-input-button" />
+            </form>
+        </div>
+    </div>
+    <div class="suggest" id="search-suggest" style="display:none" ;>
+        <ul id="search-result">
+            <li>搜索结果1</li>
+            <li>搜索结果2</li>
+            <li>搜索结果3</li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+    $("#search-input-text").on('keyup', function() {
+        var jqueryInput = $(this);
+        var searchText = jqueryInput.val();
+        /*$.get('http://api.bing.com/qsonhs.aspx?q='+searchText, function(data){
+        	alert(data);
+        }, 'json');*/
+
+        /*$.ajax({ 
+            type: "GET", 
+            url: "http://api.bing.com/qsonhs.aspx?q="+searchText,
+            dataType: "jsonp",
+            jsonp: "callback",
+            success: function(data) {
+               console.log(data);
+            },
+            error: function(jqXHR){     
+               alert("发生错误：" + jqXHR.status);  
+            },     
+        });*/
+
+        $.ajax({
+            url: 'http://api.bing.com/qsonhs.aspx?type=cb&cb=jsonpcallback&q=' + searchText,
+            dataType: "jsonp"
+        });
+
+        $('#search-suggest').show().css({
+            top: $('#search-form').offset().top + $('#search-form').outerHeight(),
+            left: $('#search-form').offset().left,
+            position: 'absolute'
+        });
+    });
+
+    $(document).on('click', function() {
+    	$('#search-suggest').hide();
+    });
+
+    function jsonpcallback(data) {
+        var data = data.AS.Results[0].Suggests;
+        var html = "";
+        $(data).each(function(index, value) {
+            html += "<li>" + value.Txt + "</li>"
+        });
+        $("#search-result").html(html);
+    };
+
+    $(document).delegate('li', 'click', function() {
+    	var keyword = $(this).text();
+    	location.href = 'http://cn.bing.com/search?q=' + keyword;
+    })
+    </script>
+</body>
+
+</html>

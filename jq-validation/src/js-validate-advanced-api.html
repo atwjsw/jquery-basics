@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>jQuery Validation 插件</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <form id="demoForm">
+        <fieldset>
+            <legend>用户登录</legend>
+            <p id="info2" style="display:none">输入错误</p>
+            <p id="info"></p>
+            <p>
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" />
+            </p>
+            <p>
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" />
+            </p>
+            <p>
+                <label for="confirm-password">确认密码</label>
+                <input type="password" id="confirm-password" name="confirm-password" />
+            </p>
+            <p>
+                <label for="email">电子邮件</label>
+                <input type="text" id="email" name="email" class='txt'/>
+            </p>
+            <p>
+                <label for="postcode">邮政编码</label>
+                <input type="text" id="postcode" name="postcode"/>
+            </p>
+            <p>
+                <label for="url">个人网页</label>
+                <input type="text" id="url" name="url" />
+            </p>
+            <p>
+                <label for="birthdate">出生日期</label>
+                <input type="text" id="birthdate" name="birthdate" class='txt'/>
+            </p>
+            <p>
+                <label for="age">年龄</label>
+                <input type="text" id="age" name="age" />
+            </p>            
+            <p>
+                <label for="salary">工资</label>
+                <input type="text" id="salary" name="salary" />
+            </p>
+            <p>
+                <button id="check">检查表单</button>
+            </p>
+            <p>
+                <input type="submit" value="登录" />
+            </p>
+        </fieldset>
+    </form>
+    <script src="vendor/jquery-1.10.0.js"></script>
+    <script src="vendor/jquery.validate-1.13.1.js"></script>
+    <script>
+    var validator;
+    $(document).ready(function() {
+        $('#check').click(function() {
+             alert($('#demoForm').valid()?"填写正确":"填写错误");
+        });
+        
+        //对所有form配置批量默认配置项
+        $.validator.setDefaults({
+            debug:true
+        });
+
+        //批量设置校验规则
+        $.validator.addClassRules({
+            txt: {
+                required: true
+            }
+        });
+
+        $.validator.addMethod("postcode", function(value, element, params){
+            var postcode = /^[0-9]{6}$/;
+            return this.optional(element) || (postcode.test(value));
+        }, $.validator.format("请输入正确的{0}邮政编码"));
+
+        validator = $('#demoForm').validate({
+            //debug: true, //验证通过也不提交表单
+            rules: {
+                //对username的校验规则
+                username: {
+                    required: true, //校验方法1 
+                    minlength: 2, //校验方法2 
+                    maxlength: 10, //校验方法3
+                    /*remote: {                  //Post请求，同时传递数据
+                        url: "remote.json",
+                        type: "post",
+                        data: {
+                            loginTime: function() {
+                                return +new Date;
+                            }
+                        }
+                    }*/
+                },
+                email: {
+                    //required: true,
+                    email: true
+                },
+                postcode: {
+                    required: true,
+                    postcode: "中国"
+                },
+                url: {
+                    url: true
+                },
+                birthdate: {
+                    //required: true,
+                    dateISO: true
+                },
+                age: {
+                    //required: true,
+                    digits: true
+                },
+                salary: {
+                    //required: true,
+                    number: true
+                },
+                password: {
+                    //只有当用户名填写的情况下才校验密码是否填写
+                    //required: {depends: function(element) {return $("#username").is(":filled");}},
+                    required: true,
+                    minlength: 6,
+                    maxlength: 12
+                },
+                "confirm-password": {
+                    equalTo: "#password"
+                }
+            },
+            messages: {
+                username: {
+                    required: "用户名必须填写", //错误信息
+                    minlength: "用户名至少为2位",
+                    maxlength: "用户名不超过10位",
+                    rangelength: "用户名应该在2至10位之间",
+                    remote: "用户名已存在"
+                },
+                password: {
+                    required: "密码必须填写",
+                    minlength: "密码至少为6位",
+                    maxlength: "密码不超过12位"
+                },
+                email: {
+                    required: "电子邮件必须填写",
+                    email: "请输入正确的电子邮件地址"
+                },
+                postcode: {
+                    required: "邮政编码必须填写",
+                    //email: "请输入正确的邮政编码"
+                },
+                url: {
+                    url: "请输入正确的个人网页地址"
+                },
+                birthdate: {
+                    required: "出生日期必须填写",
+                    dateISO: "请输入正确的出生日期"
+                },
+                age: {
+                    required: "年龄必须填写",
+                    digits: "请输入正确的年龄"
+                },
+                salary: {
+                    required: "工资必须填写",
+                    number: "请输入正确的工资"
+                },
+                "confirm-password": {
+                    equalTo: "两次输入的密码不一致"
+                }
+            },
+            submitHandler: function(form) {
+                console.log($(form).serialize());
+            },
+            invalidHandler: function(event, validator) {
+                console.log('错误数量: ' + validator.numberOfInvalids());
+            },
+            //忽略校验元素
+            ignore: ".txt"
+            /*groups:{
+                login:"username password confirm-password"
+            },
+            errorPlacement:function (error, element) {
+                error.insertBefore("#info");
+            },*/
+            //onsubmit:false,
+            //focusInvalid: false
+            //errorClass: "wrong",
+            //validClass: "right"
+            /*errorContainer: "#info2",
+            errorLabelContainer: "#info",
+            errorElement: "li",
+            wrapper: "ul"*/
+            /*showErrors: function(errorMap, errorList) {
+                console.log(errorMap);
+                console.log(errorList);
+                this.defaultShowErrors();
+            }*/
+            //success: "right",
+
+        });
+    });
+    </script>
+</body>
+
+</html>
